@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 /*
 play this: https://www.youtube.com/watch?v=d-diB65scQU
 
@@ -12,3 +14,12 @@ I need this code, just don't know where, perhaps should make some middleware, do
 
 Go code!
 */
+
+const server = require("./api/server");
+
+// we are saying, add the env port or, if that doesn't exist, use port 4000.
+const port = process.env.PORT || "4000";
+
+server.listen(port, () => {
+  console.log(`\n*** Server running on http://localhost:${port} ***\n`);
+});
