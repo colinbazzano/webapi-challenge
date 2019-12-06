@@ -18,9 +18,27 @@ router.get("/:id", validateProjectId, (req, res) => {
     });
 });
 
-router.get("/", (req, res) => {
-  res.status(200).json({ message: "hello" });
+router.get("/:id/actions", validateProjectId, (req, res) => {
+  const id = req.params.id;
+  project
+    .getProjectActions(id)
+    .then(actions => {
+      actions
+        ? res.status(200).json(actions)
+        : res
+            .status(400)
+            .json({ message: "The project does not contain any actions." });
+    })
+    .catch(error => {
+      res
+        .status(500)
+        .json({ message: "Failed to retrieve the actions for the project." });
+    });
 });
+
+// router.get("/", (req, res) => {
+//   res.status(200).json({ message: "hello" });
+// });
 
 router.post("/", (req, res) => {});
 
