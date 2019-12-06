@@ -40,13 +40,24 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+I learned that Express Middleware is the biggest feature of Express, and it's awesome.
+I also learned that Express Router is a great and easy way to split up your code up and make it really well documented and easy for another developer to come in and read.
+
 - [ ] Describe Middleware?
+
+Middleware is a great way to handle things like authentication and logging. We also have used middleware as a way to check the code for certain things, without needing to define that logic inside of our CRUD operations.
 
 - [ ] Describe a Resource?
 
+A Resource is a piece of software (say, maybe a component) that is accessible by your computer, other computers, the network, or any other object connected to a computer.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+200 request! That's the standard OK request. There's plenty others, but that covers a good amount of successful requests.
+
 - [ ] How can we partition our application into sub-applications?
+
+The easiest way for what we've done through backend would be routers and using routing to break up our code into sub-apps that make sense and are easy for other developers to come in and understand.
 
 ## Minimum Viable Product
 
