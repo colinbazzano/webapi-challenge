@@ -68,11 +68,27 @@ router.put("/:id", validateProjectId, validateProject, (req, res) => {
     })
     .catch(error => {
       console.log(error);
-      res.status(500).json({ message: "Error updating the user." });
+      res.status(500).json({ message: "Error updating the project." });
     });
 });
 
-router.delete("/:id", (req, res) => {});
+router.delete("/:id", validateProjectId, (req, res) => {
+  const id = req.params.id;
+  project
+    .remove(id)
+    .then(project => {
+      project > 0
+        ? res.status(200).json({ message: "The project has been removed!" })
+        : res
+            .status(404)
+            .json({
+              message: "The project with the specified ID does not exist."
+            });
+    })
+    .catch(error => {
+      res.status(500).json({ message: "The project could not be removed." });
+    });
+});
 
 function validateProjectId(req, res, next) {
   const id = req.params.id;
