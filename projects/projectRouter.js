@@ -42,7 +42,18 @@ router.get("/:id/actions", validateProjectId, (req, res) => {
 //   res.status(200).json({ message: "hello" });
 // });
 
-router.post("/", (req, res) => {});
+router.post("/", validateProject, (req, res) => {
+  const projectData = req.body;
+  project
+    .insert(projectData)
+    .then(project => {
+      res.status(201).json(project);
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({ message: "Error creating the project." });
+    });
+});
 
 router.put("/:id", (req, res) => {});
 
@@ -65,11 +76,9 @@ function validateProjectId(req, res, next) {
 function validateProject(req, res, next) {
   const projectData = req.body;
   if (!projectData.name || !projectData.description) {
-    res
-      .status(400)
-      .json({
-        message: "Please provide a name and description for the project."
-      });
+    res.status(400).json({
+      message: "Please provide a name and description for the project."
+    });
   } else {
     next();
   }
