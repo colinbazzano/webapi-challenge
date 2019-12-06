@@ -55,7 +55,22 @@ router.post("/", validateProject, (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {});
+router.put("/:id", validateProjectId, validateProject, (req, res) => {
+  const projectData = req.body;
+  const id = req.params.id;
+
+  project
+    .update(id, projectData)
+    .then(project => {
+      project
+        ? res.status(200).json({ ...project, ...projectData })
+        : res.status(404).json({ message: "The project could not be found." });
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({ message: "Error updating the user." });
+    });
+});
 
 router.delete("/:id", (req, res) => {});
 
