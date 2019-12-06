@@ -4,6 +4,7 @@ const action = require("../data/helpers/actionModel");
 
 const router = express.Router();
 
+// GET for projects.
 router.get("/:id", validateProjectId, (req, res) => {
   const projectData = req.params.id;
   console.log(projectData);
@@ -18,6 +19,7 @@ router.get("/:id", validateProjectId, (req, res) => {
     });
 });
 
+// GET for actions.
 router.get("/:id/actions", validateProjectId, (req, res) => {
   const id = req.params.id;
   project
@@ -58,6 +60,19 @@ function validateProjectId(req, res, next) {
     .catch(error => {
       console.log(error);
     });
+}
+
+function validateProject(req, res, next) {
+  const projectData = req.body;
+  if (!projectData.name || !projectData.description) {
+    res
+      .status(400)
+      .json({
+        message: "Please provide a name and description for the project."
+      });
+  } else {
+    next();
+  }
 }
 
 module.exports = router;
