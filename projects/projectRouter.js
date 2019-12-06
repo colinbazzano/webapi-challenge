@@ -92,7 +92,7 @@ router.get("/:id/actions", validateProjectId, (req, res) => {
 });
 
 // POST for actions
-router.post("/:id/actions", (req, res) => {
+router.post("/:id/actions", validateAction, (req, res) => {
   const id = req.params.id;
   const projectData = req.body;
   project
@@ -119,7 +119,7 @@ router.post("/:id/actions", (req, res) => {
     });
 });
 
-router.put("/:id/actions", (req, res) => {
+router.put("/:id/actions", validateAction, (req, res) => {
   const id = req.params.id;
   const projectData = req.body;
   project
@@ -145,6 +145,32 @@ router.put("/:id/actions", (req, res) => {
     })
     .catch(error => {
       res.status(500).json({ message: "Could not update the action. " });
+    });
+});
+
+router.delete("/:id/actions", (req, res) => {
+  const id = req.params.id;
+  const data = req.body;
+  project
+    .get(id)
+    .then(project => {
+      project
+        ? action
+            .remove(data)
+            .then(action => {
+              res
+                .status(200)
+                .json({ message: "The action has been removed! " });
+            })
+            .catch(error => {
+              console.log(error);
+              res.status(500).json({ message: "Could not remove action." });
+            })
+        : res.status(404).json({ message: "Could not find action." });
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({ message: "Could not delete." });
     });
 });
 
@@ -174,8 +200,15 @@ function validateProject(req, res, next) {
     next();
   }
 }
-// function validateAction(req, res, next) {
-//     const actionData = req.body;
-// }
+function validateAction(req, res, next) {
+  const actionData = req.body;
+  if (!actionData.description || !actionData.notes) {
+    res
+      .status(400)
+      .json({ message: "Please provide the required description and notes. " });
+  } else {
+    next();
+  }
+}
 
 module.exports = router;
