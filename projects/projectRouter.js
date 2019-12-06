@@ -107,17 +107,44 @@ router.post("/:id/actions", (req, res) => {
             .catch(error => {
               res.status(500).json({ message: "Could not create action." });
             })
-        : res
-            .status(404)
-            .json({
-              message: "The project with the specified ID does not exist. "
-            });
+        : res.status(404).json({
+            message: "The project with the specified ID does not exist. "
+          });
     })
     .catch(error => {
       console.log(error);
       res
         .status(500)
         .json({ message: "There was an error saving the action." });
+    });
+});
+
+router.put("/:id/actions", (req, res) => {
+  const id = req.params.id;
+  const projectData = req.body;
+  project
+    .get(id)
+    .then(project => {
+      project
+        ? action
+            .update(id, projectData)
+            .then(action => {
+              action
+                ? res.status(200).json({ ...action, ...projectData })
+                : res
+                    .status(404)
+                    .json({ message: "The action could not be found. " });
+            })
+            .catch(error => {
+              console.log(error);
+              res.status(500).json({ message: "Could not update action." });
+            })
+        : res.status(404).json({
+            message: "The project with the specified ID does not exist."
+          });
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Could not update the action. " });
     });
 });
 
